@@ -10,7 +10,7 @@ public:
 	int Rows = 0;
 	int Cols = 0;
 
-	//констркутор копирования
+	//РєРѕРЅСЃС‚СЂРєСѓС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 	Matrix(const Matrix& matr);
 
 	void Fill_matrix(const T* arr);
@@ -27,7 +27,7 @@ public:
 
 };
 
-//базовый конструктор заполняющий матрицу нолями
+//Р±Р°Р·РѕРІС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р·Р°РїРѕР»РЅСЏСЋС‰РёР№ РјР°С‚СЂРёС†Сѓ РЅРѕР»СЏРјРё
 template <typename T>
 Matrix<T>::Matrix( int rows, int cols)
 {
@@ -43,7 +43,7 @@ Matrix<T>::Matrix( int rows, int cols)
 			matrix[i][j] = 0;
 }
 
-//конструктор копирования
+//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 template<typename T>
 Matrix<T>::Matrix(const Matrix & matr)
 {
@@ -59,7 +59,7 @@ Matrix<T>::Matrix(const Matrix & matr)
 			matrix[i][j] = matr.matrix[i][j];
 }
 
-//заполение матрицы из массива
+//Р·Р°РїРѕР»РµРЅРёРµ РјР°С‚СЂРёС†С‹ РёР· РјР°СЃСЃРёРІР°
 template <typename T>
 void Matrix<T>::Fill_matrix(const T* arr)
 {
@@ -70,12 +70,12 @@ void Matrix<T>::Fill_matrix(const T* arr)
 }
 
 
-//сложение матриц
+//СЃР»РѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
 template<typename T>
  Matrix<T> Matrix<T>::operator + (const Matrix& Right)
 {
 	if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("Неправильные размеры матриц");
+		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 
 	Matrix<T> result(Rows,Cols);
 
@@ -88,12 +88,12 @@ template<typename T>
 	return Matrix(result);	
 }
 
- //вычитание матриц
+ //РІС‹С‡РёС‚Р°РЅРёРµ РјР°С‚СЂРёС†
  template<typename T>
  Matrix<T> Matrix<T>::operator - (const Matrix& Right)
  {
 	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("Неправильные размеры матриц");
+		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 
 	 Matrix<T> result(Rows, Cols);
 
@@ -105,12 +105,12 @@ template<typename T>
  }
 
  
- //сравнение матриц
+ //СЃСЂР°РІРЅРµРЅРёРµ РјР°С‚СЂРёС†
  template<typename T>
  bool Matrix<T>::operator==(const Matrix & Right)
  {
 	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("Неправильные размеры матриц");
+		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 
 	 for (int i = 0; i < Rows; ++i)
 		 for (int j = 0; j < Cols; j++)
@@ -120,13 +120,12 @@ template<typename T>
 	 return true;
  }
 
-
- //поэлементное умножение матриц
+ //РїРѕСЌР»РµРјРµРЅС‚РЅРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
  template<typename T>
  Matrix<T> Matrix<T>::operator*(const Matrix & Right)
  {
 	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("Неправильные размеры матриц");
+		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 
 	 Matrix<T> result(Rows, Cols);
 
@@ -139,13 +138,13 @@ template<typename T>
 
 
  /*
- быстрое умножение матриц по правилам
+ Р±С‹СЃС‚СЂРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС† РїРѕ РїСЂР°РІРёР»Р°Рј	
 
  template<typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix&  Right)
  {
 	if (Cols != Right.Rows)
-		throw std::exception("Неправильные размеры матриц");
+		throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 	
 	Matrix<T> result(Rows, Right.Cols);
 	T** res = result.matrix;
@@ -166,7 +165,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix&  Right)
  }
  */
 
- //умножение на число
+ //СѓРјРЅРѕР¶РµРЅРёРµ РЅР° С‡РёСЃР»Рѕ
 template<typename T>
  Matrix<T> Matrix<T>::operator*(const T num)
 {
@@ -182,7 +181,7 @@ template<typename T>
 }
  
 
- //пришлось вынести из класса из-за проблем с линковкой
+ //РїСЂРёС€Р»РѕСЃСЊ РІС‹РЅРµСЃС‚Рё РёР· РєР»Р°СЃСЃР° РёР·-Р·Р° РїСЂРѕР±Р»РµРј СЃ Р»РёРЅРєРѕРІРєРѕР№
  template <typename T>
  Matrix<T> operator * (const T num, const Matrix<T>& Right)
  {
@@ -199,12 +198,12 @@ template<typename T>
 
 
 
-//поэлементное деление матриц
+//РїРѕСЌР»РµРјРµРЅС‚РЅРѕРµ РґРµР»РµРЅРёРµ РјР°С‚СЂРёС†
  template<typename T>
  Matrix<T> Matrix<T>::operator/(const Matrix & Right)
  {
 	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("Неправильные размеры матриц");
+		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
 
 	 Matrix<T> result(Rows, Cols);
 
@@ -217,7 +216,7 @@ template<typename T>
 	
  }
 
- //деление на число
+ //РґРµР»РµРЅРёРµ РЅР° С‡РёСЃР»Рѕ
  template<typename T>
  inline Matrix<T> Matrix<T>::operator/(const T num)
  {
