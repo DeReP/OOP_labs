@@ -35,7 +35,7 @@ void equation::step()
 	v = v + dt * ( dv * NuDivHH - param);
 
 	diff(T, dT);
-	T = (HiDivHH*dT + T/dt + v*T/h) * (dth / ( h + dt*v)); // формула в репозитории
+	T = T + dt*(HiDivHH * dT + v*(T.shift(1) - T.shift(-1))/(2*h));
 	 
 }
 
