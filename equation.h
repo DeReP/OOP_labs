@@ -12,12 +12,8 @@ public:
 	double Lx;
 	double dt;
 	double h;
-	double Hi;
-	double Ro;
-	double DeltaP;
-	double Nu;
-    
-	std::map<std::string, double> consts;
+	
+	std::map<std::string, double> consts; // словарь констант
 	vec T;
 	vec dT;
 	vec v;
