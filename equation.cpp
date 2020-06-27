@@ -19,7 +19,7 @@ void equation::SetInitial(vec _T, vec _v)
 void diff(vec& T, vec& dT)
 {
 	for (size_t i = 1; i < T.size() - 2; ++i)
-		dT[i] = T[i + 1] - T[i - 1] - 2 * T[i];
+		dT[i] = T[i + 1] + T[i - 1] - 2 * T[i];
 }
 
 
