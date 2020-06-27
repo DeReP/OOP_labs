@@ -3,7 +3,8 @@
 #include <fstream>
 #include <iomanip>
 
-equation::equation(int N, double L, std::map<std::string, double> _consts) : Lx(L), NumPoint(N), h(L / N), consts(_consts), T(vec(0.0, N)), v(vec(0.0, N)), dT(vec(0.0, N)), dv(vec(0.0, N))
+equation::equation(int N, double L, std::map<std::string, double> _consts) : 
+    Lx(L), NumPoint(N), h(L / N), consts(_consts), T(vec(0.0, N)), v(vec(0.0, N)), dT(vec(0.0, N)), dv(vec(0.0, N))
 {
 	dt = h * h / 4.0;
 }
@@ -34,7 +35,7 @@ void equation::step()
 	v = v + dt * ( dv * NuDivHH - param);
 
 	diff(T, dT);
-	T = (HiDivHH*dT + T/dt + v*T/h) * (dth / ( h + dt*v)); // формула в репозитории
+	T = (HiDivHH*dT + T/dt + v*T/h) * (dth / ( h + dt*v)); // С„РѕСЂРјСѓР»Р° РІ СЂРµРїРѕР·РёС‚РѕСЂРёРё
 	 
 }
 
