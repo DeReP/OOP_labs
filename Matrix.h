@@ -1,241 +1,391 @@
 #pragma once
 #include <iostream>
-template <typename T>
-class Matrix
+#include <iomanip>
+namespace matrix
 {
-
-public:
-	Matrix(int rows, int cols);
-	T** matrix = nullptr;
-	int Rows = 0;
-	int Cols = 0;
-
-	//РєРѕРЅСЃС‚СЂРєСѓС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
-	Matrix(const Matrix& matr);
-
-	void Fill_matrix(const T* arr);
-	Matrix<T> operator + (const Matrix& Right);
-	Matrix<T> operator - (const Matrix& Right);
-	bool operator == (const Matrix& Right);
-	Matrix<T> operator * (const Matrix& Right);
-	Matrix<T> operator * (const T num);
-	//friend Matrix<T> operator * (const T num, const Matrix<T>& Right);
-	Matrix<T> operator / (const Matrix& Right);	
-	Matrix<T> operator / (const T num);
-	~Matrix(); 
-
-
-};
-
-//Р±Р°Р·РѕРІС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р·Р°РїРѕР»РЅСЏСЋС‰РёР№ РјР°С‚СЂРёС†Сѓ РЅРѕР»СЏРјРё
-template <typename T>
-Matrix<T>::Matrix( int rows, int cols)
-{
-	Rows = rows;
-	Cols = cols;
-	matrix = new T*[rows];
-
-	for (int i = 0; i < rows; ++i)
-		matrix[i] = new T[cols];
-
-	for (int i = 0; i < rows; ++i)
-		for (int j = 0; j < cols; ++j)
-			matrix[i][j] = 0;
-}
-
-//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
-template<typename T>
-Matrix<T>::Matrix(const Matrix & matr)
-{
-	Rows = matr.Rows;
-	Cols = matr.Cols;
-	matrix = new T*[Rows];
-
-	for (int i = 0; i < Rows; ++i)
-		matrix[i] = new T[Cols];
-
-	for (int i = 0; i < Rows; ++i)
-		for (int j = 0; j < Cols; ++j)
-			matrix[i][j] = matr.matrix[i][j];
-}
-
-//Р·Р°РїРѕР»РµРЅРёРµ РјР°С‚СЂРёС†С‹ РёР· РјР°СЃСЃРёРІР°
-template <typename T>
-void Matrix<T>::Fill_matrix(const T* arr)
-{
-	for (int i = 0; i < Rows; ++i)
-		for (int j = 0; j < Cols; ++j)
-			matrix[i][j] = arr[i*Cols + j ];
-	
-}
-
-
-//СЃР»РѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
-template<typename T>
- Matrix<T> Matrix<T>::operator + (const Matrix& Right)
-{
-	if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
-
-	Matrix<T> result(Rows,Cols);
-
-	for (int i = 0; i < Rows; ++i)
-		for (int j = 0; j < Cols; ++j)
-			result.matrix[i][j] = matrix[i][j] + Right.matrix[i][j];
-
-
-
-	return Matrix(result);	
-}
-
- //РІС‹С‡РёС‚Р°РЅРёРµ РјР°С‚СЂРёС†
- template<typename T>
- Matrix<T> Matrix<T>::operator - (const Matrix& Right)
- {
-	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
-
-	 Matrix<T> result(Rows, Cols);
-
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; ++j)
-			 result.matrix[i][j] = matrix[i][j] - Right.matrix[i][j];
-
-	 return Matrix(result);
- }
-
- 
- //СЃСЂР°РІРЅРµРЅРёРµ РјР°С‚СЂРёС†
- template<typename T>
- bool Matrix<T>::operator==(const Matrix & Right)
- {
-	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
-
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; j++)
-			 if (matrix[i][j] != Right.matrix[i][j])
-				 return false;
-
-	 return true;
- }
-
- //РїРѕСЌР»РµРјРµРЅС‚РЅРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
- template<typename T>
- Matrix<T> Matrix<T>::operator*(const Matrix & Right)
- {
-	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
-
-	 Matrix<T> result(Rows, Cols);
-
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; ++j)
-			 result.matrix[i][j] = matrix[i][j] * Right.matrix[i][j];
-
-	 return Matrix(result);
- }
-
-
- /*
- Р±С‹СЃС‚СЂРѕРµ СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС† РїРѕ РїСЂР°РІРёР»Р°Рј	
-
- template<typename T>
-Matrix<T> Matrix<T>::operator*(const Matrix&  Right)
- {
-	if (Cols != Right.Rows)
-		throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
-	
-	Matrix<T> result(Rows, Right.Cols);
-	T** res = result.matrix;
-	for (int i = 0; i < Rows; ++i)
+	template <typename T>
+	class Matrix
 	{
-		T* r = res[i];
-		for (int k = 0; k < Cols; ++k)
+
+	public:
+		Matrix(int rows, int cols);
+		T* matrix = nullptr;
+		int Rows = 0;
+		int Cols = 0;
+
+
+		//констркутор копирования
+		Matrix(const Matrix& matr);
+		T& operator () (int i,int j);
+		void Fill_matrix(const T* arr);
+		const Matrix<T> operator = (const Matrix & Right);
+		Matrix<T> operator + (const Matrix& Right);
+		Matrix<T> operator + (const T num);
+		Matrix<T> operator += (const Matrix& Right);
+		Matrix<T> operator += (const T num);
+		Matrix<T> operator - (const Matrix& Right);
+		Matrix<T> operator - (const T num);
+		Matrix<T> operator -= (const T num);
+		bool operator == (const Matrix& Right);
+		Matrix<T> operator * (const Matrix& Right);
+		Matrix<T> operator * (const T num);
+		Matrix<T> operator *= (const T num);
+		Matrix<T> operator / (const Matrix& Right);
+		Matrix<T> operator / (const T num);
+		Matrix<T> operator /= (const T num);
+		~Matrix();
+
+
+	};
+
+	//базовый конструктор заполняющий матрицу нолями
+	template <typename T>
+	inline Matrix<T>::Matrix(int rows, int cols)
+	{
+		Rows = rows;
+		Cols = cols;
+		matrix = new T[rows*cols];
+
+
+		T* p = matrix;
+		for (int i = 0; i < rows*cols; ++i, ++p )
+			*p = 0;
+	}
+
+	//конструктор копирования
+	template<typename T>
+	inline Matrix<T>::Matrix(const Matrix & matr)
+	{
+		Rows = matr.Rows;
+		Cols = matr.Cols;
+		matrix = new T[Rows*Cols];
+
+		T* p = matrix;
+		for (int i = 0; i < Rows*Cols; ++i, ++p)
+			*p = matr.matrix[i];
+	}
+
+	template<typename T>
+	std::ostream& operator << (std::ostream & out, const Matrix<T> & m)
+	{
+		for (int i = 0; i < m.Rows; ++i)
 		{
-			const T* right = Right.matrix[k];
-			T th = matrix[i][k];
-			for (int j = 0; j < Right.Cols; ++j)
-				r[j] += th * right[j];
+			for (int j = 0; j < m.Cols; ++j)
+				out << std::setw(5) << m.matrix[i*m.Cols + j];
+			
+			std::cout << std::endl;
 		}
-		
+		out << std::endl;
+		return out;
 	}
 	
-	return Matrix(result);
- }
- */
+	template<typename T>
+	Matrix<T> operator+(const T num, Matrix<T> & Right)
+	{
+		
+		Matrix<T> result(Right.Rows, Right.Cols);
 
- //СѓРјРЅРѕР¶РµРЅРёРµ РЅР° С‡РёСЃР»Рѕ
-template<typename T>
- Matrix<T> Matrix<T>::operator*(const T num)
-{
-	 Matrix<T> result(Rows, Cols);
+		for (int i = 0; i < Right.Rows; ++i)
+			for (int j = 0; j < Right.Cols; ++j)
+				result.matrix[i*Right.Cols + j] = Right.matrix[i*Right.Cols + j] + num;
 
+		return Matrix<T>(result);
+	}
 
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; ++j)
-			 result.matrix[i][j] = matrix[i][j] * num;
-			 
-		 
-	 return Matrix{ result };
-}
- 
-
- //РїСЂРёС€Р»РѕСЃСЊ РІС‹РЅРµСЃС‚Рё РёР· РєР»Р°СЃСЃР° РёР·-Р·Р° РїСЂРѕР±Р»РµРј СЃ Р»РёРЅРєРѕРІРєРѕР№
- template <typename T>
- Matrix<T> operator * (const T num, const Matrix<T>& Right)
- {
-	 Matrix<T> result(Right.Rows, Right.Cols);
-
-
-	 for (int i = 0; i < Right.Rows; ++i)
-		 for (int j = 0; j < Right.Cols; ++j)
-			 result.matrix[i][j] = Right.matrix[i][j] * num;
-
-
-	 return  Matrix<T>(result);
- }
+	template<typename T>
+	 inline T& Matrix<T>::operator()(int i,int j)
+	{	
+		if( j < 0 || j > Cols)
+			throw std::exception("wrong index");
+		
+		return matrix[i*Cols + j];
+	}
 
 
 
-//РїРѕСЌР»РµРјРµРЅС‚РЅРѕРµ РґРµР»РµРЅРёРµ РјР°С‚СЂРёС†
- template<typename T>
- Matrix<T> Matrix<T>::operator/(const Matrix & Right)
- {
-	 if (Rows != Right.Rows || Cols != Right.Cols)
-		 throw std::exception("ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»ГҐ Г°Г Г§Г¬ГҐГ°Г» Г¬Г ГІГ°ГЁГ¶");
+	//заполение матрицы из массива
+	template <typename T>
+	void Matrix<T>::Fill_matrix(const T* arr)
+	{
+		T* p = matrix;
+		for (int i = 0; i < Rows*Cols; ++i, ++p)
+			*p = arr[i];
 
-	 Matrix<T> result(Rows, Cols);
+	}
 
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; ++j)
-			 result.matrix[i][j] = matrix[i][j] / Right.matrix[i][j];
+	template<typename T>
+	inline const Matrix<T> Matrix<T>::operator=(const Matrix & Right)
+	{
+		if (&Right != this)
+		{
+			if (Rows != Right.Rows || Cols != Right.Cols)
+			{
+				delete[] matrix;
+				Rows = Right.Rows;
+				Cols = Right.Cols;
+				matrix = new T[Rows * Cols];
+			}
 
-	 return Matrix(result);
+			for (int i = 0; i < Rows; ++i)
+				for (int j = 0; j < Cols; ++j)
+					matrix[i*Cols + j] = Right.matrix[i*Cols + j];
+		}
+
+		return *this;
+	}
+
+
+	//сложение матриц
+	template<typename T>
+	Matrix<T> Matrix<T>::operator + (const Matrix& Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
+
+		Matrix<T> result(Rows, Cols);
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] + Right.matrix[i*Cols + j];
+
+		return Matrix(result);
+	}
+
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator+(const T num)
+	{
+		
+		Matrix<T> result(Rows, Cols);
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] + num;
+
+		return Matrix(result);
+	}
+	
+	template<typename T>
+	Matrix<T> Matrix<T>::operator += (const Matrix& Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				matrix[i*Cols + j] = matrix[i*Cols + j] + Right.matrix[i*Cols + j];
+
+		return *this;
+	}
+
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator+=(const T num)
+	{
+		
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				matrix[i*Cols + j] = matrix[i*Cols + j] + num;
+
+		return *this;
+	}
+
 
 	
- }
+	//вычитание матриц
+	template<typename T>
+	Matrix<T> Matrix<T>::operator - (const Matrix& Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
 
- //РґРµР»РµРЅРёРµ РЅР° С‡РёСЃР»Рѕ
- template<typename T>
- inline Matrix<T> Matrix<T>::operator/(const T num)
- {
-	 Matrix<T> result(Rows, Cols);
-	 for (int i = 0; i < Rows; ++i)
-		 for (int j = 0; j < Cols; ++j)
-			 result.matrix[i][j] = matrix[i][j] / num;
-	 return Matrix(result);
+		Matrix<T> result(Rows, Cols);
 
- }
- 
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] - Right.matrix[i*Cols + j];
 
-template <typename T>
-Matrix<T>::~Matrix()
-{ 
-	for (int i = 0; i < Rows; ++i)
-		delete[] matrix[i];
+		return Matrix(result);
+	}
 
-	delete[] matrix;
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator-(const T num)
+	{
+		
+
+		Matrix<T> result(Rows, Cols);
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] - num;
+
+		return Matrix(result);
+	}
+
+	template <typename T>
+	Matrix<T> operator - (const T num, const Matrix<T>& Right)
+	{
+		Matrix<T> result(Right.Rows, Right.Cols);
+
+
+		for (int i = 0; i < Right.Rows; ++i)
+			for (int j = 0; j < Right.Cols; ++j)
+				result.matrix[i*Right.Cols + j] = num - Right.matrix[i*Right.Cols + j];
+
+
+		return  Matrix<T>(result);
+	}
+
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator-=(const T num)
+	{
+		
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				matrix[i*Cols + j] = matrix[i*Cols + j] - num;
+
+		return *this;
+	}
+
+
+	//сравнение матриц
+	template<typename T>
+	bool Matrix<T>::operator==(const Matrix & Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; j++)
+				if (this(i,j) != Right(i,j))
+					return false;
+
+		return true;
+	}
+
+
+	//поэлементное умножение матриц
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator*(const Matrix & Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
+
+		Matrix<T> result(Rows, Cols);
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] * Right.matrix[i*Cols + j];
+
+		return Matrix(result);
+	}
+
+
 	
-}
 
+	//умножение на число
+	template<typename T>
+	Matrix<T> Matrix<T>::operator*(const T num)
+	{
+		Matrix<T> result(Rows, Cols);
+
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] * num;
+
+		return Matrix(result);
+	}
+
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator*=(const T num)
+	{
+		
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				matrix[i*Cols + j] = matrix[i*Cols + j] * num;
+
+		return *this;
+	}
+
+
+	//пришлось вынести из класса из-за проблем с линковкой
+	template <typename T>
+	Matrix<T> operator * (const T num, const Matrix<T>& Right)
+	{
+		Matrix<T> result(Right.Rows, Right.Cols);
+
+
+		for (int i = 0; i < Right.Rows; ++i)
+			for (int j = 0; j < Right.Cols; ++j)
+				result.matrix[i*Right.Cols + j] = Right.matrix[i*Right.Cols + j]  * num;
+
+
+		return  Matrix<T>(result);
+	}
+
+
+
+	//поэлементное деление матриц
+	template<typename T>
+	Matrix<T> Matrix<T>::operator/(const Matrix & Right)
+	{
+		if (Rows != Right.Rows || Cols != Right.Cols)
+			throw std::exception("Неправильные размеры матриц");
+
+		Matrix<T> result(Rows, Cols);
+
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result.matrix[i*Cols + j] = matrix[i*Cols + j] / Right.matrix[i*Cols + j];
+
+		return Matrix(result);
+
+
+	}
+
+	//деление на число
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator/(const T num)
+	{
+		Matrix<T> result(Rows, Cols);
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				result(i,j) = matrix[i*Cols + j] / num;
+		
+		return Matrix(result);
+	}
+
+	template <typename T>
+	Matrix<T> operator / (const T num, const Matrix<T>& Right)
+	{
+		Matrix<T> result(Right.Rows, Right.Cols);
+
+
+		for (int i = 0; i < Right.Rows; ++i)
+			for (int j = 0; j < Right.Cols; ++j)
+				result.matrix[i*Right.Cols + j] = num / Right.matrix[i*Right.Cols + j];
+
+
+		return  Matrix<T>(result);
+	}
+
+
+	template<typename T>
+	inline Matrix<T> Matrix<T>::operator/=(const T num)
+	{
+		for (int i = 0; i < Rows; ++i)
+			for (int j = 0; j < Cols; ++j)
+				matrix[i*Cols + j] = matrix[i*Cols + j] / num;
+
+		return *this;
+	}
+
+
+	template <typename T>
+	Matrix<T>::~Matrix()
+	{
+		delete[] matrix;
+	}
+}
